@@ -15,14 +15,18 @@ class FormBook extends Component
     public $pages;
     public $author;
     
-    public function mount($book){
+    public function mount($book= null){
+
         $this->book = $book;
-        $this->isbn = $book->isbn;
-        $this->title = $book->title;
-        $this->year = $book->year;
-        $this->genre = $book->genre;
-        $this->pages = $book->pages;
-        $this->author = $book->author;
+        if($book){
+
+            $this->isbn = $book->isbn;
+            $this->title = $book->title;
+            $this->year = $book->year;
+            $this->genre = $book->genre;
+            $this->pages = $book->pages;
+            $this->author = $book->author;
+        }
     }
     
     public function render()

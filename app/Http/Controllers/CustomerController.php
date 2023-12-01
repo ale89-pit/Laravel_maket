@@ -17,25 +17,33 @@ class CustomerController extends Controller
     }
 
     public function store(Request $request){
-        $request->validate([
-            'name' => 'required',
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.Customer::class],
-            'phone' => 'required',
-            'address' => 'required',
-            'birth_date' => 'required',   
-        ]);
-        $user_id = auth()->id();
-        $customer = Customer::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'phone' => $request->phone,
-            'address' => $request->address,
-            'birth_date' => $request->birth_date,
-            'user_id' => $user_id
-        ]);
-
-        
-        return redirect()->route('dashboard');
+        try {
+            $request->validate([
+                'name' => 'required',
+                'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.Customer::class],
+                'phone' => 'required',
+                'address' => 'required',
+                'birth_date' => 'required',   
+            ]);
+    
+            $user_id = auth()->id();
+            $customer = Customer::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'phone' => $request->phone,
+                'address' => $request->address,
+                'birth_date' => $request->birth_date,
+                'user_id' => $user_id
+            ]);
+    
+            return redirect()->route('dashboard')->with('success', 'Add customer successfully');
+        } catch (ValidationException $e) {
+            
+            return redirect()->back()->withErrors($e->errors())->withInput();
+        } catch (\Exception $e) {
+            
+            return redirect()->back()->with('error', 'An error occurred while adding the customer');
+        }
     }
     
     public function edit($id){
@@ -49,7 +57,7 @@ class CustomerController extends Controller
         // dd($customer);
        
         
-        return redirect()->route('customer.edit',$customer->id)->with('status', 'profile-updated');
+        return redirect()->route('customer.edit',$customer->id)->with('success', 'profile-updated');
     }
 
     public  function findByUser(){
@@ -63,6 +71,6 @@ class CustomerController extends Controller
         $customer = Customer::find($id);
         $customer->delete();
         // dd('cancellato');
-        return redirect()->route('dashboard');
+        return redirect()->route('dashboard')->with("success", "Customer deleted successfully");
     }
 }

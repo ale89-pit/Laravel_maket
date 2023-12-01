@@ -26,20 +26,26 @@ class ItemController extends Controller
         return view('livewire.update-item', ['item' => $item]);
     }
 
-    // public function store(Request $request){
-    //     $request->validate([
-    //         'name' => 'required',
-    //         'description' => 'required',
-    //         'price' => 'required',
-    //         'customer_id' => 'required',
-    //     ]);
-    //     $item = Item::create([
-    //         'name' => $request->name,
-    //         'description' => $request->description,
-    //         'price' => $request->price,
-    //         'customer_id' => $customer_id,
-    //         'itemable_id' => $request->$itemable_id,
-    //         'itemable_type' => $request->$itemable_type
-    //     ]);
-    // }
+    public function store(Request $request){
+        dump($request);
+
+        $jewelry= Jewelry->save();
+        $request->validate([
+            'name' => 'required',
+            'description' => 'required',
+            'price' => 'required',
+            'customer_id' => 'required',
+        ]);
+        $item = Item::create([
+            'name' => $request->name,
+            'description' => $request->description,
+            'price' => $request->price,
+            'customer_id' => $customer_id,
+            'itemable_id' => $jewelry->id,
+            'itemable_type' => $jewelry['itemable']
+        ]);
+    }
+
+
+
 }

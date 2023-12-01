@@ -11,6 +11,7 @@ class JewelryView extends Component
     public function mount($jewelry)
     {
         $this->jewelry = $jewelry;
+        
     }
     public function render()
     {

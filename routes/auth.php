@@ -11,6 +11,9 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ItemController;
+use App\Http\Controllers\BookController;
+use App\Http\Controllers\JewelryController;
+use App\Http\Controllers\OtherController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
@@ -60,6 +63,11 @@ Route::middleware('auth')->group(function () {
     Route::delete('/customer/{id}',[CustomerController::class, 'destroy'])->name('customer.destroy');
     
     Route::get('/item/{id}', [ItemController::class, 'edit'])->name('item.show');
+
+    Route::post('/customer', [ItemController::class, 'store'])->name('customer.create-item');
+    Route::post('/book', [BookController::class, 'store'])->name('book.store');
+    Route::post('/jewelry', [JewelryController::class, 'store'])->name('jewelry.store');
+    Route::post('/other', [OtherController::class, 'store'])->name('other.store');
 
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
                 ->name('logout');
