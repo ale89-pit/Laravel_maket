@@ -1,0 +1,38 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+use App\Models\Customer;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('items', function (Blueprint $table) {
+            $table->id();
+            $table->string('name')->nullable();
+            $table->text('description')->nullable();
+            $table->foreignIdFor(Customer::class)->constrained();
+            $table->Morphs('itemable');
+            $table->float('price');
+            $table->timestamps();
+        });
+    }
+
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class);
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('items');
+    }
+};

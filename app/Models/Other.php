@@ -2,10 +2,16 @@
 
 namespace App\Models;
 
-use App\Models\Item;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
-class Other extends Item
+class Other extends Model
 {
+    use HasFactory;
+    protected $fillable = ['category','model','serial_number','brand'];
 
-
+    public function item()
+    {
+        return $this->morphOne(Item::class, 'itemable');
+    }
 }

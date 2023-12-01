@@ -20,6 +20,7 @@ class Customer extends Model
         'phone',
         'address',
         'birth_date',
+        'user_id',
 
     ];
 
@@ -27,5 +28,10 @@ class Customer extends Model
         'birth_date' => 'datetime:Y/m/d', 
         'options' => 'array',
     ];
+
+    public function items()
+    {
+        return $this->hasMany(Item::class);
+    }
 
 }

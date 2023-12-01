@@ -9,10 +9,47 @@ use App\Models\Customer;
 class CustomerController extends Controller
 {
 
+ 
     public  function index(){
         $customer = Customer::all();
         dd($customer);
         return view('livewire.customer', ['customers' => $customers]);
+    }
+
+    public function store(Request $request){
+        $request->validate([
+            'name' => 'required',
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.Customer::class],
+            'phone' => 'required',
+            'address' => 'required',
+            'birth_date' => 'required',   
+        ]);
+        $user_id = auth()->id();
+        $customer = Customer::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'address' => $request->address,
+            'birth_date' => $request->birth_date,
+            'user_id' => $user_id
+        ]);
+
+        
+        return redirect()->route('dashboard');
+    }
+    
+    public function edit($id){
+        $customer = Customer::with('items')->find($id);
+        // dd($customer);
+        return view('livewire.update-customer', ['customer' => $customer]);
+    }
+    public function update($id, Request $request){
+        $customer = Customer::find($id);
+        $customer->update($request->all());
+        // dd($customer);
+       
+        
+        return redirect()->route('customer.edit',$customer->id)->with('status', 'profile-updated');
     }
 
     public  function findByUser(){
@@ -20,5 +57,12 @@ class CustomerController extends Controller
         $customers = Customer::where('user_id', $user_id)->get();
     //    dump($customers);
         return view('livewire.customer',['customers' => $customers]);
+    }
+
+    public function destroy($id){
+        $customer = Customer::find($id);
+        $customer->delete();
+        // dd('cancellato');
+        return redirect()->route('dashboard');
     }
 }

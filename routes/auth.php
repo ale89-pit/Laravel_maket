@@ -9,7 +9,8 @@ use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
-use App\Controllers\CustomerController;
+use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\ItemController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
@@ -55,9 +56,10 @@ Route::middleware('auth')->group(function () {
 
     Route::put('password', [PasswordController::class, 'update'])->name('password.update');
 
-    Route::get('customer',[CustomerController::class, 'findByUser'])->name('customer.show');
-    // Route::get('customer-all',[CustomerController::class, 'index'])->name('customer.show-all');
-    // devo creare una rotta qui per aggiungere la logica di inserimento di un cliente da parte di un admin loggato
+    Route::post('/dashboard',[CustomerController::class, 'store'])->name('customer.store');
+    Route::delete('/customer/{id}',[CustomerController::class, 'destroy'])->name('customer.destroy');
+    
+    Route::get('/item/{id}', [ItemController::class, 'edit'])->name('item.show');
 
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
                 ->name('logout');
